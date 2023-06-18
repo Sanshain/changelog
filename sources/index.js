@@ -43,7 +43,7 @@ exports.default = function changeLog(filter) {
 
         let newLog = ''
         for (const line of lines) {
-            if (lastLog?.split('.')[0] == line) break;
+            if (lastLog?.split('. ')[0] == line) break;
             newLog += line + '. '
         }
 
