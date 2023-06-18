@@ -14,7 +14,8 @@ export default {
     input: './sources/bin.js',
     output: {
         file: './bin/bin.js',
-        format: 'cjs'
+        format: 'cjs',
+        exports: "auto"
     },
     plugins: [
         resolve(),
