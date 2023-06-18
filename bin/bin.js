@@ -37,7 +37,7 @@ const packageConfig = fs.readFileSync(PACKAGE_PATH).toString();
  */
 sources.default = function changeLog(filter) {
 
-    var [lastVer, lastLog] = getLastVer();
+    var [lastVer, lastLog, content] = getLastVer();
 
     const packageInfo = JSON.parse(packageConfig);
     if (packageInfo.version !== lastVer) {
@@ -60,13 +60,13 @@ sources.default = function changeLog(filter) {
 
         let newLog = '';
         for (const line of lines) {
-            if (lastLog == line) break;
+            if (lastLog?.split('.')[0] == line) break;
             newLog += line + '. ';
         }
 
         if (newLog) {
             console.log('CHANGELOG updated');
-            fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + log);
+            fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + content);
         }
     }
 };
@@ -79,7 +79,7 @@ function getLastVer() {
         const lastVerInfo = log.split('\n')[0];
         const verInfo = lastVerInfo.match(/(?<ver>\d+.\d+.\d+)b? - (?<log>[\s\S]+)/);
         if (verInfo) {
-            return [verInfo.groups?.ver, verInfo.groups?.log];
+            return [verInfo.groups?.ver, verInfo.groups?.log, log];
         }
     }
     return [];
@@ -92,7 +92,7 @@ const {execSync} = require$$1__default["default"];
 
 
 
-if (~process.argv.indexOf('--config')) {
+if (process.argv.indexOf('--config')) {
 
     const fs = require$$0__default["default"];
     const path = require$$2__default["default"];
