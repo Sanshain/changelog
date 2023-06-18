@@ -92,7 +92,7 @@ const {execSync} = require$$1__default["default"];
 
 
 
-if (process.argv.indexOf('--config')) {
+if (~process.argv.indexOf('--config')) {
 
     const fs = require$$0__default["default"];
     const path = require$$2__default["default"];
