@@ -20,10 +20,10 @@ if (process.argv.indexOf('--config')) {
     }
     fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageInfo))
 
-    const gitConfigured = execSync('git config core.hooksPath .git/hooks/')
+    const gitConfigured = execSync('git config core.hooksPath .git/hooks/').toString()
     console.log(gitConfigured);
 
-    const hooksConfigured = execSync('npx simple-git-hooks')
+    const hooksConfigured = execSync('npx simple-git-hooks').toString()
     console.log(hooksConfigured);
 }
 else {
