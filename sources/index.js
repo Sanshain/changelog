@@ -49,7 +49,7 @@ exports.default = function changeLog(filter) {
 
         if (newLog) {
             console.log('CHANGELOG updated');
-            fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + content);
+            fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + (content || ''));
         }
     }
 }
