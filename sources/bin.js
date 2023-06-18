@@ -4,6 +4,8 @@ const { default: changeLog } = require("./index.js");
 const {execSync} = require('child_process');
 
 
+const json_beautifier = require('csvjson-json_beautifier');
+
 
 
 if (process.argv.indexOf('--config')) {
@@ -18,7 +20,9 @@ if (process.argv.indexOf('--config')) {
     if (!packageInfo['simple-git-hooks']) {
         packageInfo['simple-git-hooks'] = { "pre-push": "npm run changelog" }
     }
-    fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageInfo))
+    const json = json_beautifier(packageInfo, { dropQuotesOnNumbers: true, inlineShortArrays: true });
+    // fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageInfo))
+    fs.writeFileSync(PACKAGE_PATH, json)
 
     const gitConfigured = execSync('git config core.hooksPath .git/hooks/').toString()
     console.log(gitConfigured);
