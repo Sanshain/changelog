@@ -5,7 +5,7 @@ const {execSync} = require('child_process');
 
 
 
-if (process.argv.indexOf('--config')) {
+if (~process.argv.indexOf('--config')) {
 
     const fs = require('fs');
     const path = require('path');

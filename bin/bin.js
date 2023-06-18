@@ -60,7 +60,7 @@ sources.default = function changeLog(filter) {
 
         let newLog = '';
         for (const line of lines) {
-            if (lastLog?.split('.')[0] == line) break;
+            if (lastLog?.split('. ')[0] == line) break;
             newLog += line + '. ';
         }
 
@@ -92,7 +92,7 @@ const {execSync} = require$$1__default["default"];
 
 
 
-if (process.argv.indexOf('--config')) {
+if (~process.argv.indexOf('--config')) {
 
     const fs = require$$0__default["default"];
     const path = require$$2__default["default"];
