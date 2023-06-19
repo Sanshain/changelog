@@ -33,7 +33,7 @@ exports.titlesToLines = function titlesToLines({ legacyLog, changelogFilename}) 
 
     legacyLog = legacyLog || fs.readFileSync(changelogFilename || CHANGELOG_FILE).toString();
 
-    const lines = legacyLog.split('## ');
+    const lines = legacyLog.split('## ').filter(Boolean);
     const content = lines.map(log => {
         const _lines = log.split('\n')
         const verInfo = _lines[0].trim()
