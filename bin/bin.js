@@ -44,7 +44,7 @@ sources.default = function changeLog(options) {
 
     const { filter, titled } = options;
 
-    var [lastVer, lastLog, content] = getLastVer();
+    var [lastVer, lastLog, content] = getLastVer(titled);
 
     const packageInfo = JSON.parse(packageConfig);
     if (packageInfo.version !== lastVer) {
@@ -81,10 +81,10 @@ sources.default = function changeLog(options) {
         if (newLog) {
             console.log('CHANGELOG updated');
             if (titled) {
-                fs$1.writeFileSync(CHANGELOG, `##${packageInfo.version} \n\n${newLog}\n` + (content || ''));
+                fs$1.writeFileSync(CHANGELOG, `## ${packageInfo.version} \n\n${newLog}\n` + (content || ''));
             }
             else {
-                fs$1.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + (content || ''));
+                fs$1.writeFileSync(CHANGELOG, `**${packageInfo.version}** - ${newLog}\n` + (content || ''));
             }
         }
     }
@@ -98,13 +98,76 @@ sources.default = function changeLog(options) {
 function getLastVer(titled) {
     if (fs$1.existsSync(CHANGELOG)) {
         const log = fs$1.readFileSync(CHANGELOG).toString();
-        const lastVerInfo = titled ? (_lastlog => _lastlog ? _lastlog.split('\n').filter(p => p.startsWith(' - '))[0].slice(3) : '')(log.split('##')[1]) : log.split('\n')[0];
-        const verInfo = lastVerInfo.match(/(?<ver>\d+.\d+.\d+)b? - (?<log>[\s\S]+)/);
-        if (verInfo) {
-            return [verInfo.groups?.ver, verInfo.groups?.log, log];
+        const lastVerInfo = titled ? log.split('## ')[1] : log.split('\n')[0];
+        if (titled) {
+            if (lastVerInfo) {
+                const lastVer = lastVerInfo[0].trim();
+                const lastlog = lastVerInfo.split('\n').filter(p => p.startsWith(' - '))[0].slice(3);
+                return [lastVer, lastlog, log]
+            }
+        }
+        else {
+            const verInfo = lastVerInfo.match(/(\*\*)?(?<ver>\d+.\d+.\d+)b?(\*\*)? - (?<log>[\s\S]+)/);
+            if (verInfo) {
+                return [verInfo.groups?.ver, verInfo.groups?.log, log];
+            }
         }
     }
     return [];
+}
+
+var convert = {};
+
+var hasRequiredConvert;
+
+function requireConvert () {
+	if (hasRequiredConvert) return convert;
+	hasRequiredConvert = 1;
+	const CHANGELOG_FILE = 'CHANGELOG.md';
+
+	const fs = require$$0__default["default"];
+
+	/**
+	 * 
+	 * @param {{ legacyLog?: string, changelogFilename?: string }} options
+	 * @returns {string}
+	 */
+	convert.linesToTitles = function linesToTitles({ legacyLog, changelogFilename}) {
+
+	    legacyLog = fs.readFileSync(changelogFilename || CHANGELOG_FILE).toString();
+
+	    const lines = legacyLog.split('\n');
+	    const content = lines.map(line => {
+	        const verInfo = line.match(/(\*\*)?(?<ver>\d+.\d+.\d+)b?(\*\*)? - (?<log>[\s\S]+)/);
+	        return `## ${verInfo.groups?.ver}\n\n${verInfo.groups?.log.split('. ').map(c => ' - ' + c).join('\n')}`;
+	    }).join('\n\n');
+
+	    changelogFilename && fs.writeFileSync(changelogFilename || CHANGELOG_FILE, content);
+
+	    return content;
+	};
+
+	/**
+	 *
+	 * @param {{ legacyLog?: string, changelogFilename?: string }} options
+	 * @returns {string}
+	 */
+	convert.titlesToLines = function titlesToLines({ legacyLog, changelogFilename}) {
+
+	    legacyLog = legacyLog || fs.readFileSync(changelogFilename || CHANGELOG_FILE).toString();
+
+	    const lines = legacyLog.split('## ');
+	    const content = lines.map(log => {
+	        const verInfo = lastVerInfo[0].trim();
+	        const sublogs = log.split('\n').filter(p => p.startsWith(' - ')).map(p => p.slice(3)).join('. ');        
+	        return `**${verInfo}** - ${sublogs}`;
+	    }).join('\n\n');
+
+	    changelogFilename && fs.writeFileSync(changelogFilename || CHANGELOG_FILE, content);
+
+	    return content
+	};
+	return convert;
 }
 
 //@ts-check
@@ -152,10 +215,23 @@ if (~process.argv.indexOf('--config')) {
     }
 
 }
+else if (~process.argv.indexOf('--convert')) {
+    
+    const changelogFilename = path.join(process.cwd(), 'CHANGELOG.md');
+
+    if (~process.argv.indexOf('--titled')) {
+        const { linesToTitles } = requireConvert();
+        linesToTitles({ changelogFilename });
+    }
+    else if (~process.argv.indexOf('--lined')) {
+        const { titlesToLines } = requireConvert();
+        titlesToLines({ changelogFilename });
+    }
+}
 else {
     const filters = process.argv.filter(w => w.startsWith('--filter='));    
 
-    if (!filters.length) changeLog();
+    if (!filters.length) changeLog({titled});
     else {
         changeLog({ filter: filters.map(w => new RegExp(w.slice(9))), titled});
     }

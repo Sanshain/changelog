@@ -27,7 +27,7 @@ exports.default = function changeLog(options) {
 
     const { filter, titled } = options;
 
-    var [lastVer, lastLog, content] = getLastVer();
+    var [lastVer, lastLog, content] = getLastVer(titled);
 
     const packageInfo = JSON.parse(packageConfig)
     if (packageInfo.version !== lastVer) {
@@ -64,10 +64,10 @@ exports.default = function changeLog(options) {
         if (newLog) {
             console.log('CHANGELOG updated');
             if (titled) {
-                fs.writeFileSync(CHANGELOG, `##${packageInfo.version} \n\n${newLog}\n` + (content || ''));
+                fs.writeFileSync(CHANGELOG, `## ${packageInfo.version} \n\n${newLog}\n` + (content || ''));
             }
             else {
-                fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + (content || ''));
+                fs.writeFileSync(CHANGELOG, `**${packageInfo.version}** - ${newLog}\n` + (content || ''));
             }
         }
     }
@@ -81,10 +81,19 @@ exports.default = function changeLog(options) {
 function getLastVer(titled) {
     if (fs.existsSync(CHANGELOG)) {
         const log = fs.readFileSync(CHANGELOG).toString();
-        const lastVerInfo = titled ? (_lastlog => _lastlog ? _lastlog.split('\n').filter(p => p.startsWith(' - '))[0].slice(3) : '')(log.split('##')[1]) : log.split('\n')[0]
-        const verInfo = lastVerInfo.match(/(?<ver>\d+.\d+.\d+)b? - (?<log>[\s\S]+)/);
-        if (verInfo) {
-            return [verInfo.groups?.ver, verInfo.groups?.log, log];
+        const lastVerInfo = titled ? log.split('## ')[1] : log.split('\n')[0];
+        if (titled) {
+            if (lastVerInfo) {
+                const lastVer = lastVerInfo[0].trim()
+                const lastlog = lastVerInfo.split('\n').filter(p => p.startsWith(' - '))[0].slice(3);
+                return [lastVer, lastlog, log]
+            }
+        }
+        else {
+            const verInfo = lastVerInfo.match(/(\*\*)?(?<ver>\d+.\d+.\d+)b?(\*\*)? - (?<log>[\s\S]+)/);
+            if (verInfo) {
+                return [verInfo.groups?.ver, verInfo.groups?.log, log];
+            }
         }
     }
     return [];

@@ -43,10 +43,23 @@ if (~process.argv.indexOf('--config')) {
     }
 
 }
+else if (~process.argv.indexOf('--convert')) {
+    
+    const changelogFilename = path.join(process.cwd(), 'CHANGELOG.md');
+
+    if (~process.argv.indexOf('--titled')) {
+        const { linesToTitles } = require('./convert')
+        linesToTitles({ changelogFilename })
+    }
+    else if (~process.argv.indexOf('--lined')) {
+        const { titlesToLines } = require('./convert')
+        titlesToLines({ changelogFilename })
+    }
+}
 else {
     const filters = process.argv.filter(w => w.startsWith('--filter='))    
 
-    if (!filters.length) changeLog()
+    if (!filters.length) changeLog({titled})
     else {
         changeLog({ filter: filters.map(w => new RegExp(w.slice(9))), titled})
     }
