@@ -1,6 +1,7 @@
 //@ts-check
 
 const CHANGELOG_FILE = 'CHANGELOG.md'
+const TITLE = '# changelog'
 
 const fs = require('fs');
 
@@ -15,6 +16,9 @@ exports.linesToTitles = function linesToTitles({ legacyLog, changelogFilename}) 
 
     const lines = legacyLog.split('\n').filter(Boolean);
     const content = lines.map(line => {
+        if (line == TITLE) {
+            return line;
+        }
         const verInfo = line.match(/(\*\*)?(?<ver>\d+.\d+.\d+)b?(\*\*)? - (?<log>[\s\S]+)/);
         return `## ${verInfo?.groups?.ver}\n\n${verInfo?.groups?.log.split('. ').filter(Boolean).map(c => ' - ' + c).join('\n')}`;
     }).join('\n\n');
@@ -35,6 +39,7 @@ exports.titlesToLines = function titlesToLines({ legacyLog, changelogFilename}) 
 
     const lines = legacyLog.split('## ').filter(Boolean);
     const content = lines.map(log => {
+        if (log.trim() === TITLE) return TITLE;
         const _lines = log.split('\n')
         const verInfo = _lines[0].trim()
         const sublogs = _lines.filter(p => p.startsWith(' - ')).map(p => p.slice(3)).join('. ')

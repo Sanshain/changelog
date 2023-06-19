@@ -29,17 +29,23 @@ exports.default = function changeLog(options) {
     const { filter, titled } = options;
     const title = options.title || ''
 
-    var [lastVer, lastLog, content] = getLastVer(titled);
+    var [lastVer, lastLog, content] = getLastVer({titled, title});
 
     const packageInfo = JSON.parse(packageConfig)
     if (packageInfo.version !== lastVer) {
         const log = execSync('git log --oneline').toString();
         let lines = log.split('\n')
-            .map(title => title.replace(/\([\s\S]+\)/, ''))                             // remove current branch name
-            .map(line => line.split(' ').slice(1).join(' '))                            // remove commit hash
-            .filter(w => !w.match(/(readme|merge branch|npmignore|gitignore)/i))        // remove service commits by specifying keywords
-            .filter(title => !title.match(/^[\w\d\-_]+$/m))                             // remove one-word commits as useless info
-            .filter(title => title.length > 6)                                          // remove too short commit names as useless
+            .map(title => title.replace(/\([\s\S]+\)/, ''))                                         // remove current branch name
+            .map(line => {                                                                          // remove commit hash
+                const commitInfo = line.split(' ');
+                const commitName = commitInfo.slice(1).join(' ');
+                const hash = commitInfo[0];
+                return { commitName, hash };
+            })                            
+            .filter(ci => !ci.commitName.match(/(readme|merge branch|npmignore|gitignore)/i))       // remove service commits by specifying keywords
+            .filter(ci => !ci.commitName.match(/^[\w\d\-_]+$/m))                                    // remove one-word commits as useless info
+            .filter(ci => ci.commitName.length > 6)                                                 // remove too short commit names as useless
+            .map(ci => ci.commitName)
 
         if (filter) {
             if (filter instanceof RegExp) {
@@ -65,11 +71,12 @@ exports.default = function changeLog(options) {
 
         if (newLog) {
             console.log('CHANGELOG updated');
+            const title = options.title || '# changelog\n\n';
             if (titled) {
-                fs.writeFileSync(CHANGELOG, `## ${packageInfo.version} \n\n${newLog}\n` + (content || ''));
+                fs.writeFileSync(CHANGELOG, title + `## ${packageInfo.version} \n\n${newLog}\n` + (content || ''));
             }
             else {
-                fs.writeFileSync(CHANGELOG, `**${packageInfo.version}** - ${newLog}\n` + (content || ''));
+                fs.writeFileSync(CHANGELOG, title + `**${packageInfo.version}** - ${newLog}\n` + (content || ''));
             }
         }
     }
@@ -78,24 +85,33 @@ exports.default = function changeLog(options) {
 
 
 /**
- * @param {boolean} [titled]
+ * @param {{
+ *  titled?: boolean,
+ *  title?: string
+ * }} [options]
  */
-function getLastVer(titled) {
+function getLastVer(options) {
+
+    const { title, titled } = options || {};
+
     if (fs.existsSync(CHANGELOG)) {
-        const log = fs.readFileSync(CHANGELOG).toString();
+        
+        let log = fs.readFileSync(CHANGELOG).toString();
+        log = log.replace(title || /^# changelog/, '');
+
         const lastVerInfo = titled ? log.split('## ')[1] : log.split('\n')[0];
         if (titled) {
             if (lastVerInfo) {
                 const lastVerLines = lastVerInfo.split('\n')
                 const lastVer = lastVerLines[0].trim();
                 const lastlog = lastVerLines.filter(p => p.startsWith(' - '))[0].slice(3);
-                return [lastVer, lastlog, log]
+                return [lastVer, lastlog, log.trim()]
             }
         }
         else {
             const verInfo = lastVerInfo.match(/(\*\*)?(?<ver>\d+.\d+.\d+)b?(\*\*)? - (?<log>[\s\S]+)/);
             if (verInfo) {
-                return [verInfo.groups?.ver, verInfo.groups?.log, log];
+                return [verInfo.groups?.ver, verInfo.groups?.log, log.trim()];
             }
         }
     }
