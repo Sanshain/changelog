@@ -35,7 +35,8 @@ const packageConfig = fs$1.readFileSync(PACKAGE_PATH).toString();
  * 
  * @param {{
  *  filter?: RegExp | RegExp[]           // optional filter
- *  titled?: boolean
+ *  titled?: boolean,
+ *  title?: string
  * }} [options]
  */
 sources.default = function changeLog(options) {
@@ -43,6 +44,7 @@ sources.default = function changeLog(options) {
     options = options || {};
 
     const { filter, titled } = options;
+    options.title || '';
 
     var [lastVer, lastLog, content] = getLastVer(titled);
 
@@ -101,8 +103,9 @@ function getLastVer(titled) {
         const lastVerInfo = titled ? log.split('## ')[1] : log.split('\n')[0];
         if (titled) {
             if (lastVerInfo) {
-                const lastVer = lastVerInfo[0].trim();
-                const lastlog = lastVerInfo.split('\n').filter(p => p.startsWith(' - '))[0].slice(3);
+                const lastVerLines = lastVerInfo.split('\n');
+                const lastVer = lastVerLines[0].trim();
+                const lastlog = lastVerLines.filter(p => p.startsWith(' - '))[0].slice(3);
                 return [lastVer, lastlog, log]
             }
         }

@@ -1,21 +1,22 @@
 {
-  "name": "changelog-tool",
-  "version": "1.0.14",
-  "description": "",
+  "name": "npm-changelog",
+  "version": "1.0.19",
+  "description": "changelog auto-generation tool",
+  "main": "./sources/index.js",
   "bin": {
     "changeLog": "./bin/bin.js"
-  },
-  "main": "index.js",
+  },  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "homepage": "https://github.com/Sanshain/changelog",
   "keywords": [
     "changelog",
     "npm",
     "git"
   ],
   "author": "Sanshain",
-  "license": "ISC",
+  "license": "MIT",
   "peerDependencies": {
     "simple-git-hooks": "^2.8.1"
   },
