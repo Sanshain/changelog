@@ -7,7 +7,7 @@
     "changeLog": "./bin/bin.js"
   },  
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./sources/bin.js"
   },
   "homepage": "https://github.com/Sanshain/changelog",
   "keywords": [
