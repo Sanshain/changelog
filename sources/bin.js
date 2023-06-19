@@ -8,6 +8,16 @@ const { default: changeLog } = require("./index.js");
 
 
 
+const availArgs = [
+    '--titled',
+    '--config',
+    '--convert',
+    '--lined',
+    '--filter'
+]
+
+
+
 const titled = process.argv.some(w => w.startsWith('--titled'))
 
 
