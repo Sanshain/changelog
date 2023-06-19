@@ -5,12 +5,6 @@ changelog auto-generation tool
 ## Install:
 
 ```sh
-npm i -D Sanshain/changelog
-```
-
-or 
-
-```sh
 npm i npm-changelog -D
 ```
 
