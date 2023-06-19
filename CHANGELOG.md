@@ -2,4 +2,6 @@
 
 **1.0.21** - convertation fix. fixed double titles on titled mode. remove surplus empty line on convert. fix convertation functionality. convert functions availibility. change git log. changelog integration. fix undefined. refix condition. 
 
-**1.0.20** - fix multicommits ver break. fix multicommits ver break. fix multicommits ver break. fix bin bug. prevent git hooks error . buitifier up. json butifier. bin rebuilt. 
+**1.0.20** - fix multicommits ver break. fix multicommits ver break. fix multicommits ver break. fix bin bug. prevent git hooks error . 
+
+**1.0.19** - buitifier up. json butifier. bin rebuilt. 
