@@ -13,10 +13,10 @@ exports.linesToTitles = function linesToTitles({ legacyLog, changelogFilename}) 
 
     legacyLog = fs.readFileSync(changelogFilename || CHANGELOG_FILE).toString();
 
-    const lines = legacyLog.split('\n');
+    const lines = legacyLog.split('\n').filter(Boolean);
     const content = lines.map(line => {
         const verInfo = line.match(/(\*\*)?(?<ver>\d+.\d+.\d+)b?(\*\*)? - (?<log>[\s\S]+)/);
-        return `## ${verInfo?.groups?.ver}\n\n${verInfo?.groups?.log.split('. ').map(c => ' - ' + c).join('\n')}`;
+        return `## ${verInfo?.groups?.ver}\n\n${verInfo?.groups?.log.split('. ').filter(Boolean).map(c => ' - ' + c).join('\n')}`;
     }).join('\n\n');
 
     changelogFilename && fs.writeFileSync(changelogFilename || CHANGELOG_FILE, content);
