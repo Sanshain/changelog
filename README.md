@@ -24,7 +24,7 @@ The package generates pre-push git hook, that one'll generate new changelog with
 
 First of all you need initialize pre-push hook:
 ```sh
-npx Sanshain/changelog --config
+npx npm-changelog --config
 ```
 
 Next step: add custom script to package.json: 
