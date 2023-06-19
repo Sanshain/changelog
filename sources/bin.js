@@ -11,7 +11,6 @@ const { default: changeLog } = require("./index.js");
 
 
 const titled = process.argv.some(w => w.startsWith('--titled'))
-const stored = process.argv.some(w => w.startsWith('--stored'))
 
 
 if (~process.argv.indexOf('--config')) {    
@@ -45,29 +44,6 @@ if (~process.argv.indexOf('--config')) {
         console.log(hooksConfigured);
     }
 
-
-    if (titled) {
-        // get all story
-        // if (~packageInfo.devDependencies.indexOf('changelog')) installPackage('changelog');
-        
-        const remoteAddress = execSync('git remote -v').toString().split('\n')[0].match(/[\w]+\s+(?<repo>[^\s]+)\s/)?.groups?.repo;
-        if (remoteAddress) generateInitialLog(remoteAddress);
-        else {
-            const { stdin: input, stdout: output } = require('node:process');
-            const readline = require('node:readline').createInterface({ input, output });
-
-            const msgInfo = 'The remote address is not specified for the current git repository (that one is required to create logs ' +
-                            'preceding the current configuration (only github supports)). You can skip the step by passing an empty string';
-
-            readline.question(msgInfo, (remoteAddress) => {
-                if (remoteAddress) {
-                    generateInitialLog(remoteAddress);
-                }
-                readline.close();
-            });
-
-        }
-    }
 }
 else {
     const filters = process.argv.filter(w => w.startsWith('--filter='))    

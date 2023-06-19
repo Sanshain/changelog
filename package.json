@@ -27,9 +27,6 @@
     "rollup-plugin-terser": "^7.0.2",
     "simple-git-hooks": "^2.8.1"
   },
-  "dependencies": {
-    "changelog": "^1.4.2"
-  },
   "simple-git-hooks": {
     "pre-push": "npm run changelog"
   }

@@ -51,7 +51,10 @@ exports.default = function changeLog(options) {
         let newLog = ''
 
         if (titled) {
-            
+            for (const line of lines) {
+                if (lastLog == line) break;
+                newLog += ` - ${line}\n`
+            }
         }
         else for (const line of lines) {
             if (lastLog?.split('. ')[0] == line) break;
@@ -60,17 +63,25 @@ exports.default = function changeLog(options) {
 
         if (newLog) {
             console.log('CHANGELOG updated');
-            fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + (content || ''));
+            if (titled) {
+                fs.writeFileSync(CHANGELOG, `##${packageInfo.version} \n\n${newLog}\n` + (content || ''));
+            }
+            else {
+                fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + (content || ''));
+            }
         }
     }
 }
 
 
 
-function getLastVer() {
+/**
+ * @param {boolean} [titled]
+ */
+function getLastVer(titled) {
     if (fs.existsSync(CHANGELOG)) {
         const log = fs.readFileSync(CHANGELOG).toString();
-        const lastVerInfo = log.split('\n')[0]
+        const lastVerInfo = titled ? (_lastlog => _lastlog ? _lastlog.split('\n').filter(p => p.startsWith(' - '))[0].slice(3) : '')(log.split('##')[1]) : log.split('\n')[0]
         const verInfo = lastVerInfo.match(/(?<ver>\d+.\d+.\d+)b? - (?<log>[\s\S]+)/);
         if (verInfo) {
             return [verInfo.groups?.ver, verInfo.groups?.log, log];
