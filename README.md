@@ -54,3 +54,11 @@ And watch how your `CHANGELOG.md` is changing
 - `--titled` - selects to use the changelog view with headers
 - `--convert` - allows convert among `titled` and `lined` views
 
+## Using via API
+
+Using via API availible also:
+
+```ts
+import { default as changelog } from 'npm-changelog';
+changelog({})
+```
