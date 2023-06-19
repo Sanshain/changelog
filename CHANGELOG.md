@@ -1,0 +1,1 @@
+1.0.8 - fix undefined. refix condition. fix multicommits ver break. fix multicommits ver break. fix multicommits ver break. fix bin bug. prevent git hooks error . buitifier up. json butifier. bin rebuilt. 

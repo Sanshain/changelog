@@ -7,7 +7,8 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "changelog": "changelog https://github.com/Sanshain/types-spring.git all"
   },
   "keywords": [
     "changelog",
@@ -23,6 +24,13 @@
     "@rollup/plugin-commonjs": "^25.0.1",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "rollup": "^3.25.1",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "simple-git-hooks": "^2.8.1"
+  },
+  "dependencies": {
+    "changelog": "^1.4.2"
+  },
+  "simple-git-hooks": {
+    "pre-push": "npm run changelog"
   }
 }

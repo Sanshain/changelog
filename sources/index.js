@@ -16,9 +16,16 @@ const packageConfig = fs.readFileSync(PACKAGE_PATH).toString()
 
 /**
  * 
- * @param {RegExp | RegExp[]} [filter] : optional filter;
+ * @param {{
+ *  filter?: RegExp | RegExp[]           // optional filter
+ *  titled?: boolean
+ * }} [options]
  */
-exports.default = function changeLog(filter) {
+exports.default = function changeLog(options) {
+
+    options = options || {}
+
+    const { filter, titled } = options;
 
     var [lastVer, lastLog, content] = getLastVer();
 
@@ -42,7 +49,11 @@ exports.default = function changeLog(filter) {
         }
 
         let newLog = ''
-        for (const line of lines) {
+
+        if (titled) {
+            
+        }
+        else for (const line of lines) {
             if (lastLog?.split('. ')[0] == line) break;
             newLog += line + '. '
         }
