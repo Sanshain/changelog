@@ -2,14 +2,14 @@
 
 'use strict';
 
-var require$$0 = require('fs');
 var require$$1 = require('child_process');
+var require$$0 = require('fs');
 var require$$2 = require('path');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
 var require$$1__default = /*#__PURE__*/_interopDefaultLegacy(require$$1);
+var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
 var require$$2__default = /*#__PURE__*/_interopDefaultLegacy(require$$2);
 
 var bin = {};
@@ -18,24 +18,31 @@ var sources = {};
 
 //@ts-check
 
-const fs = require$$0__default["default"];
+const fs$1 = require$$0__default["default"];
 const { execSync: execSync$1 } = require$$1__default["default"];
-const path = require$$2__default["default"];
+const path$1 = require$$2__default["default"];
 
 
-const CHANGELOG = path.join(process.cwd(), 'CHANGELOG.md');
+const CHANGELOG = path$1.join(process.cwd(), 'CHANGELOG.md');
 
-const PACKAGE_PATH = path.join(process.cwd(), 'package.json');
+const PACKAGE_PATH = path$1.join(process.cwd(), 'package.json');
 
 
-const packageConfig = fs.readFileSync(PACKAGE_PATH).toString();
+const packageConfig = fs$1.readFileSync(PACKAGE_PATH).toString();
 
 
 /**
  * 
- * @param {RegExp | RegExp[]} [filter] : optional filter;
+ * @param {{
+ *  filter?: RegExp | RegExp[]           // optional filter
+ *  titled?: boolean
+ * }} [options]
  */
-sources.default = function changeLog(filter) {
+sources.default = function changeLog(options) {
+
+    options = options || {};
+
+    const { filter, titled } = options;
 
     var [lastVer, lastLog, content] = getLastVer();
 
@@ -59,24 +66,39 @@ sources.default = function changeLog(filter) {
         }
 
         let newLog = '';
-        for (const line of lines) {
+
+        if (titled) {
+            for (const line of lines) {
+                if (lastLog == line) break;
+                newLog += ` - ${line}\n`;
+            }
+        }
+        else for (const line of lines) {
             if (lastLog?.split('. ')[0] == line) break;
             newLog += line + '. ';
         }
 
         if (newLog) {
             console.log('CHANGELOG updated');
-            fs.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + content);
+            if (titled) {
+                fs$1.writeFileSync(CHANGELOG, `##${packageInfo.version} \n\n${newLog}\n` + (content || ''));
+            }
+            else {
+                fs$1.writeFileSync(CHANGELOG, `${packageInfo.version} - ${newLog}\n` + (content || ''));
+            }
         }
     }
 };
 
 
 
-function getLastVer() {
-    if (fs.existsSync(CHANGELOG)) {
-        const log = fs.readFileSync(CHANGELOG).toString();
-        const lastVerInfo = log.split('\n')[0];
+/**
+ * @param {boolean} [titled]
+ */
+function getLastVer(titled) {
+    if (fs$1.existsSync(CHANGELOG)) {
+        const log = fs$1.readFileSync(CHANGELOG).toString();
+        const lastVerInfo = titled ? (_lastlog => _lastlog ? _lastlog.split('\n').filter(p => p.startsWith(' - '))[0].slice(3) : '')(log.split('##')[1]) : log.split('\n')[0];
         const verInfo = lastVerInfo.match(/(?<ver>\d+.\d+.\d+)b? - (?<log>[\s\S]+)/);
         if (verInfo) {
             return [verInfo.groups?.ver, verInfo.groups?.log, log];
@@ -87,15 +109,18 @@ function getLastVer() {
 
 //@ts-check
 
+const { execSync } = require$$1__default["default"];
+const fs = require$$0__default["default"];
+const path = require$$2__default["default"];
+
 const { default: changeLog } = sources;
-const {execSync} = require$$1__default["default"];
 
 
 
-if (~process.argv.indexOf('--config')) {
+const titled = process.argv.some(w => w.startsWith('--titled'));
 
-    const fs = require$$0__default["default"];
-    const path = require$$2__default["default"];
+
+if (~process.argv.indexOf('--config')) {    
 
     const PACKAGE_PATH = path.join(process.cwd(), 'package.json');        
     const packageInfo = JSON.parse(fs.readFileSync(PACKAGE_PATH).toString());
@@ -119,22 +144,32 @@ if (~process.argv.indexOf('--config')) {
         console.log(hooksConfigured);
     }
     catch (er) {
-        if (fs.existsSync(path.join(process.cwd(), 'pnpm-lock.yaml'))) {
-            console.log(execSync('pnpm i -D simple-git-hooks').toString());
-        }
-        else {
-            console.log(execSync('npm i -D simple-git-hooks').toString());
-        }
+
+        installPackage('simple-git-hooks');
 
         const hooksConfigured = execSync('npx simple-git-hooks').toString();
         console.log(hooksConfigured);
     }
+
 }
 else {
-    const filters = process.argv.filter(w => w.startsWith('--filter='));
+    const filters = process.argv.filter(w => w.startsWith('--filter='));    
+
     if (!filters.length) changeLog();
     else {
-        changeLog(filters.map(w => new RegExp(w.slice(9))));
+        changeLog({ filter: filters.map(w => new RegExp(w.slice(9))), titled});
+    }
+}
+
+/**
+ * @param {string} packageName
+ */
+function installPackage(packageName) {
+    if (fs.existsSync(path.join(process.cwd(), 'pnpm-lock.yaml'))) {
+        console.log(execSync('pnpm i -D ' + packageName).toString());
+    }
+    else {
+        console.log(execSync('npm i -D ' + packageName).toString());
     }
 }
 

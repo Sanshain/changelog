@@ -4,8 +4,6 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const changelog = require('changelog');
-
 const { default: changeLog } = require("./index.js");
 
 
@@ -51,39 +49,6 @@ else {
     if (!filters.length) changeLog()
     else {
         changeLog({ filter: filters.map(w => new RegExp(w.slice(9))), titled})
-    }
-}
-
-/**
- * @param {string} remoteAddress
- */
-function generateInitialLog(remoteAddress) {
-    if (remoteAddress.startsWith('git')) {
-        remoteAddress = remoteAddress.replace('git@github.com:', '').replace('.git', '')
-    }
-    const store = changelog.generate(remoteAddress);
-    if ('then' in store) {
-        store.then(data => {
-            //With npm each "version" corresponds to all changes for that build pushed on npm
-            //With github each "version" is one GMT day of changes
-            data.versions.forEach(function (version) {
-                console.log(version.version); //currently npm projects only
-                console.log(version.date); //JS Date
-
-
-                //version.changes is an array of commit messages for that version
-                version.changes.forEach(function (change) {
-                    console.log(' * ' + change);
-                });
-            });
-
-            //Information about the project
-            console.log(data.project);
-        });
-    }
-    else {
-        console.log(store);
-        return false;
     }
 }
 
