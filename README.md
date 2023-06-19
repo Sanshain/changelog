@@ -14,7 +14,7 @@ The package generates pre-push git hook, that one'll generate new changelog with
 
 ## Features: 
 - generates changelog based on npm versions from commit names
-- filter for insignificant commit names
+- filters for useless commit names
 - custom commit names filters is possible
 - supports titled and listed views and converts from other to each other
 - fully automatic turnkey changelog generation
