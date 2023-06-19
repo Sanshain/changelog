@@ -49,7 +49,7 @@ And watch how your `CHANGELOG.md` is changing
 
 ## Options
 
-- `--filter=` - allows you to add custom filters that will not skip matching commit names in changelog. By default, all short names (less then six symbols) are ignored, as well as names consisting of only one word, and also containing words in the name 
+- `--filter=` - allows you to add custom filters (will useing as regexps) that will not skip matching commit names in changelog. By default, all short names (less then six symbols) are ignored, as well as names consisting of only one word, and also containing words in the name 
 `gitignore`, `readme`, `merge` and `npmignore`
 - `--titled` - selects to use the changelog view with headers
 - `--convert` - allows convert among `titled` and `lined` views
