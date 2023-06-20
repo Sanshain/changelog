@@ -13,12 +13,10 @@ npm i npm-changelog -D
 The package generates pre-push git hook, that one'll generate new changelog with appropriate version on each git push command
 
 ## Features: 
-- generates changelog based on npm versions from commit names
-- filters for useless commit names
-- custom commit names filters is possible
+- full programmatically changelog generation ordered by npm versions and based on filtered commit names
+- gives the opportunity of custom [commits names] filters tuning to changelog auto generation
 - supports titled and listed views and converts from other to each other
-- fully automatic turnkey changelog generation
-- you can change changelog (except last feature) and the changes will keeping
+- gives the opportunity of log changing after generation (except last note!) and keeps the changes after subsequent auto-regeneration
 
 ## Usage: 
 
@@ -53,6 +51,39 @@ And watch how your `CHANGELOG.md` is changing
 `gitignore`, `readme`, `merge` and `npmignore`
 - `--titled` - selects to use the changelog view with headers
 - `--convert` - allows convert among `titled` and `lined` views
+
+## Views
+
+### --titled
+
+```markdown
+# changelog
+
+## 1.0.6
+
+ - feature: added d
+
+## 1.0.5
+
+ - feature: added c
+
+## 1.0.4
+
+ - feature: added b
+ - feature: a is 2
+```
+
+### --lined (by default)
+
+```markdown
+# changelog
+
+**1.0.6** - feature: added d
+
+**1.0.5** - feature: added c
+
+**1.0.4** - feature: added b. feature: a is 2
+```
 
 ## Using via API
 
