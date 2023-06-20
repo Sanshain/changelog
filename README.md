@@ -1,6 +1,6 @@
 # changelog
 
-changelog auto-generation tool
+Changelog auto-generation tool
 
 ## Install:
 
