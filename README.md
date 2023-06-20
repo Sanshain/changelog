@@ -15,17 +15,17 @@ The package generates pre-push git hook, that one'll generate new changelog with
 ## Features: 
 - full programmatically changelog generation ordered by npm versions and based on filtered commit names
 - gives the opportunity of custom [commits names] filters tuning to changelog auto generation
-- supports titled and listed views and converts from other to each other
+- supports titled and listed views and convertation from other to each other
 - gives the opportunity of log changing after generation (except last note!) and keeps the changes after subsequent auto-regeneration
 
 ## Usage: 
 
-First of all you need initialize pre-push hook:
+**First of all:** you need initialize pre-push hook:
 ```sh
 npx npm-changelog --config
 ```
 
-Next step: add custom script to package.json: 
+**Next step**: add custom script to package.json: 
 
 ```json
 {
@@ -35,7 +35,7 @@ Next step: add custom script to package.json:
 }
 ```
 
-And finally just work with git as usual:
+**And finally:** just work with git as usual:
 
 ```sh
 git add . 
