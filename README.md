@@ -47,8 +47,7 @@ And watch how your `CHANGELOG.md` is changing
 
 ## Options
 
-- `--filter=` - allows to add custom filters (will useing as regexps) that will prevent matching commit names in changelog. By default, all short names (less then six symbols) are ignored, as well as names consisting of only one word, and also containing words  
-`gitignore`, `readme`, `merge` and `npmignore`
+- `--filter=` - allows to add custom filters (will useing as regexps) that will prevent using matching commit names in changelog. By default, all short names (less then six symbols) are ignored, as well as names consisting of only one word or containing such service words as `gitignore`, `readme`, `merge` and `npmignore`
 - `--titled` - selects to use the changelog view with headers
 - `--convert` - allows convert among `titled` and `lined` views
 
