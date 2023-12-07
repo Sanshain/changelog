@@ -9,9 +9,10 @@ const { default: changeLog } = require("./index.js");
 
 
 const availArgs = [
-    '--titled',
     '--config',
+    '--pre-commit',
     '--convert',
+    '--titled',
     '--lined',
     '--filter'
 ]
@@ -28,7 +29,11 @@ if (~process.argv.indexOf('--config')) {
 
     if (!packageInfo?.scripts['changelog']) packageInfo.scripts['changelog'] = "changelog"
     if (!packageInfo['simple-git-hooks']) {
-        packageInfo['simple-git-hooks'] = { "pre-push": "npm run changelog" }
+        packageInfo['simple-git-hooks'] = {
+            [~process.argv.indexOf('--pre-commit') ? "pre-commit" : "pre-push"]: "npm run changelog",
+            // "pre-push": "npm run changelog"
+        }
+
     }    
     fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageInfo, null, 2))
 
