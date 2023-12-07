@@ -49,7 +49,12 @@ And watch how your `CHANGELOG.md` is changing
 
 - `--config [--pre-commit]` - config initialization on current project (by default used `pre-push` hook)
 - `--filter=[version]` - allows you to add custom filters (will useing as regexps) that will not skip matching commit names in changelog. By default, all short names (less then six symbols) are ignored, as well as names consisting of only one word, and also containing words in the name 
-`gitignore`, `readme`, `merge` and `npmignore`. Usage example: `changelog --filter=version --filter=--skip`. Shoud be specified at scipt command with in `package.json`.
+`gitignore`, `readme`, `merge` and `npmignore`. Usage example (following command should be specified with **"chanhelog"** command with-in scripts sections inside package.json file):
+
+  ```
+  changelog --filter=version --filter=--skip
+  ```
+  
 - `--titled` - selects to use the changelog view with headers
 - `--convert [--titled]` - allows convert among `titled` and `lined` views
 
