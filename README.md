@@ -1,5 +1,8 @@
 # changelog
 
+[![npm](https://img.shields.io/npm/v/npm-changelog)](https://www.npmjs.com/package/npm-changelog)
+[![npm](https://img.shields.io/npm/dm/npm-changelog)](https://www.npmjs.com/package/npm-changelog)
+
 Changelog auto-generation tool
 
 ## Install:
