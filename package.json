@@ -1,6 +1,6 @@
 {
   "name": "npm-changelog",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "changelog auto-generation tool",
   "main": "./sources/index.js",
   "bin": {
