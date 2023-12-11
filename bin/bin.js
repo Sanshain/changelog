@@ -115,7 +115,7 @@ function getLastVer(options) {
     if (fs$1.existsSync(CHANGELOG)) {
         
         let log = fs$1.readFileSync(CHANGELOG).toString();
-        log = log.replace(title || /^# changelog/, '');
+        log = log.replace(title || /^# changelog\s+/, '');
 
         const lastVerInfo = titled ? log.split('## ')[1] : log.split('\n')[0];
         if (titled) {
