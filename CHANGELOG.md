@@ -1,5 +1,6 @@
 # changelog
 
+**1.1.5** - fix title skiping for --lined mode. bin update. update npm-changelog. fix --lined title passing. 
 **1.1.2** - fix \r bug by file reading. set deprecated not sequence type ++2. pre-commit hook support. test reup. test up. test reup. test up. 
 
 **1.0.21** - convertation fix. fixed double titles on titled mode. remove surplus empty line on convert. 

@@ -93,7 +93,7 @@ sources.default = function changeLog(options) {
                 fs$1.writeFileSync(CHANGELOG, title + `## ${packageInfo.version} \n\n${newLog}\n` + (content || ''));
             }
             else {
-                fs$1.writeFileSync(CHANGELOG, title + `**${packageInfo.version}** - ${newLog}\n` + (content || ''));
+                fs$1.writeFileSync(CHANGELOG, title + `**${packageInfo.version}** - ${newLog}\n\n` + (content || ''));
             }
         }
     }

@@ -76,7 +76,7 @@ exports.default = function changeLog(options) {
                 fs.writeFileSync(CHANGELOG, title + `## ${packageInfo.version} \n\n${newLog}\n` + (content || ''));
             }
             else {
-                fs.writeFileSync(CHANGELOG, title + `**${packageInfo.version}** - ${newLog}\n` + (content || ''));
+                fs.writeFileSync(CHANGELOG, title + `**${packageInfo.version}** - ${newLog}\n\n` + (content || ''));
             }
         }
     }
