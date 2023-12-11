@@ -1,6 +1,6 @@
 {
   "name": "npm-changelog",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "changelog auto-generation tool",
   "main": "./sources/index.js",
   "bin": {
@@ -23,11 +23,13 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.1",
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "npm-changelog": "^1.1.1",
+    "@rollup/plugin-node-resolve": "^15.1.0",    
+    "npm-changelog": "^1.1.3",
     "rollup": "^3.25.1",
-    "rollup-plugin-terser": "^7.0.2",
     "simple-git-hooks": "^2.8.1"
+  },
+  "optionalDependencies": {
+    "@rollup/plugin-terser": "^0.4.4"
   },
   "simple-git-hooks": {
     "pre-push": "npm run changelog"

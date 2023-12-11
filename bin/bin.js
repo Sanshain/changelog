@@ -102,6 +102,7 @@ sources.default = function changeLog(options) {
 
 
 /**
+ * @description 
  * @param {{
  *  titled?: boolean,
  *  title?: string
@@ -122,7 +123,7 @@ function getLastVer(options) {
                 const lastVerLines = lastVerInfo.split('\n');
                 const lastVer = lastVerLines[0].trim();
                 const lastlog = lastVerLines.filter(p => p.startsWith(' - '))[0].slice(3);
-                return [lastVer, lastlog, log.trim()]
+                return [lastVer, lastlog.replace('\r', ''), log.trim()]
             }
         }
         else {
