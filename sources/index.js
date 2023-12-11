@@ -85,6 +85,7 @@ exports.default = function changeLog(options) {
 
 
 /**
+ * @description 
  * @param {{
  *  titled?: boolean,
  *  title?: string

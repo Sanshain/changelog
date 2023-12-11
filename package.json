@@ -1,13 +1,14 @@
 {
   "name": "npm-changelog",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "changelog auto-generation tool",
   "main": "./sources/index.js",
   "bin": {
     "changeLog": "./bin/bin.js"
-  },  
+  },
   "scripts": {
-    "test": "node ./sources/bin.js"
+    "test": "node ./sources/bin.js",
+    "changelog": "changelog --lined"
   },
   "homepage": "https://github.com/Sanshain/changelog",
   "keywords": [
@@ -23,8 +24,12 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.1",
     "@rollup/plugin-node-resolve": "^15.1.0",
+    "npm-changelog": "^1.1.1",
     "rollup": "^3.25.1",
     "rollup-plugin-terser": "^7.0.2",
     "simple-git-hooks": "^2.8.1"
+  },
+  "simple-git-hooks": {
+    "pre-push": "npm run changelog"
   }
 }

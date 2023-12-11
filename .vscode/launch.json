@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch --config --titled",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -16,6 +16,19 @@
                 "--config",
                 "--titled"
             ]
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch --titled",
+            "cwd": "${workspaceFolder}\\example",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\sources\\bin.js",
+            "args": [
+                "--titled"
+            ]
+        }        
     ]
 }
